@@ -1,60 +1,41 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState([])
-  const carousel = useRef(null);
-
   useEffect(() => {
     fetch('http://localhost:3000/static/produtos.json')
-    .then((response) => response.json())
-    .then(setData);
+      .then((response) => response.json())
 
   }, []);
 
-  const handleLeftClick = (e) => {
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);  
-    carousel.current.scrollLeft -= carousel.current.offsetWidth;   
+  let time = 5000,
+    currentImageIndex = 0,
+    images = document
+      .querySelectorAll("slide"),
+      max = images.length;
+
+  function nextImage() {
+    images[currentImageIndex]
+      .classList.remove("selected")
+
+    currentImageIndex++
+
+    if (currentImageIndex >= max)
+      currentImageIndex = 0
+
+    images[currentImageIndex]
+      .classList.add("selected")
   }
 
-  const handleRightClick = (e) =>{
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);
-    carousel.current.scrollLeft += carousel.current.offsetWidth; 
+  function start() {
+    setInterval(() => {
+      // troca de image
+      nextImage()
+    }, time)
   }
 
-  if(!data || !data.length) return null;
+  window.addEventListener("load", start)
 
-  return (
-    <div className="container">
-      <div className="logo">
-        <img src="" alt="Logo Loja"></img>
-      </div>
-      <div className="carousel" ref={carousel}>
-
-        {data.map((item) => {
-          const {id, name, price, oldprice, image} = item
-          return (
-          <div className="item" key={id}>
-          <div className="image">
-            <img src={image} alt={name} />
-          </div>
-          <div className="info">
-            <span className="name">{name}  </span>
-            <span className="oldPrice">{oldprice}  </span>
-            <span className="Price"> {price}</span>
-          </div>
-        </div>);
-          })}
-      </div>
-      <div className="buttons">
-        <button onClick={handleLeftClick}><img src="/static/images/216151_right_chevron_icon.png" alt="Scroll Left"/></button>
-        <button onClick={handleRightClick}><img src="/static/images/216151_right_chevron_icon.png" alt="Scroll Left"/></button>
-      </div>
-
-    </div>
-  );
 }
 
 export default App;
