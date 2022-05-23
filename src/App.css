@@ -215,3 +215,18 @@ input {
 #slide05:checked ~ .s1  {
   margin-left: -80%;
 }
+
+.map-responsive{
+  overflow:hidden;
+  padding-bottom:55%;
+  position:relative;
+  height:0;
+}
+
+.map-responsive iframe{
+  left: 160px;
+  top: 95px;
+  height:60%;
+  width:70%;
+  position:absolute;
+}
